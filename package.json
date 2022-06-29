@@ -1,13 +1,13 @@
 {
-  "name": "@radar/lnrpc",
+  "name": "lnrpc",
   "version": "v0.11.1-beta.1",
   "description": "A Typescript gRPC client for LND with support for all LND sub-servers",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "config": {
-    "lnd-release-tag": "v0.11.1-beta",
-    "lnd-url": "https://raw.githubusercontent.com/lightningnetwork/lnd",
-    "protoc-version": "3.5.1"
+    "lnd-release-tag": "obd",
+    "lnd-url": "https://raw.githubusercontent.com/omnilaboratory/lnd",
+    "protoc-version": "3.6.1"
   },
   "scripts": {
     "test": "mocha \"test/**/*.test.ts\"",
