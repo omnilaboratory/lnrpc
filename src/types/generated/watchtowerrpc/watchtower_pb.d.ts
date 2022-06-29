@@ -48,8 +48,8 @@ export class GetInfoResponse extends jspb.Message {
 export namespace GetInfoResponse {
   export type AsObject = {
     pubkey: Uint8Array | string,
-    listeners: Array<string>,
-    uris: Array<string>,
+    listenersList: Array<string>,
+    urisList: Array<string>,
   }
 }
 

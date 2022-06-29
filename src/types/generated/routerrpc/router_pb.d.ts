@@ -2,7 +2,7 @@
 // file: routerrpc/router.proto
 
 import * as jspb from "google-protobuf";
-import * as rpc_pb from "../rpc_pb";
+import * as lightning_pb from "../lightning_pb";
 
 export class SendPaymentRequest extends jspb.Message {
   getDest(): Uint8Array | string;
@@ -10,11 +10,11 @@ export class SendPaymentRequest extends jspb.Message {
   getDest_asB64(): string;
   setDest(value: Uint8Array | string): void;
 
-  getAmt(): number;
-  setAmt(value: number): void;
-
   getAmtMsat(): number;
   setAmtMsat(value: number): void;
+
+  getAssetId(): number;
+  setAssetId(value: number): void;
 
   getPaymentHash(): Uint8Array | string;
   getPaymentHash_asU8(): Uint8Array;
@@ -24,14 +24,16 @@ export class SendPaymentRequest extends jspb.Message {
   getFinalCltvDelta(): number;
   setFinalCltvDelta(value: number): void;
 
+  getPaymentAddr(): Uint8Array | string;
+  getPaymentAddr_asU8(): Uint8Array;
+  getPaymentAddr_asB64(): string;
+  setPaymentAddr(value: Uint8Array | string): void;
+
   getPaymentRequest(): string;
   setPaymentRequest(value: string): void;
 
   getTimeoutSeconds(): number;
   setTimeoutSeconds(value: number): void;
-
-  getFeeLimitSat(): number;
-  setFeeLimitSat(value: number): void;
 
   getFeeLimitMsat(): number;
   setFeeLimitMsat(value: number): void;
@@ -53,9 +55,9 @@ export class SendPaymentRequest extends jspb.Message {
   setCltvLimit(value: number): void;
 
   clearRouteHintsList(): void;
-  getRouteHintsList(): Array<rpc_pb.RouteHint>;
-  setRouteHintsList(value: Array<rpc_pb.RouteHint>): void;
-  addRouteHints(value?: rpc_pb.RouteHint, index?: number): rpc_pb.RouteHint;
+  getRouteHintsList(): Array<lightning_pb.RouteHint>;
+  setRouteHintsList(value: Array<lightning_pb.RouteHint>): void;
+  addRouteHints(value?: lightning_pb.RouteHint, index?: number): lightning_pb.RouteHint;
 
   getDestCustomRecordsMap(): jspb.Map<number, Uint8Array | string>;
   clearDestCustomRecordsMap(): void;
@@ -63,15 +65,21 @@ export class SendPaymentRequest extends jspb.Message {
   setAllowSelfPayment(value: boolean): void;
 
   clearDestFeaturesList(): void;
-  getDestFeaturesList(): Array<rpc_pb.FeatureBit>;
-  setDestFeaturesList(value: Array<rpc_pb.FeatureBit>): void;
-  addDestFeatures(value: rpc_pb.FeatureBit, index?: number): rpc_pb.FeatureBit;
+  getDestFeaturesList(): Array<lightning_pb.FeatureBitMap[keyof lightning_pb.FeatureBitMap]>;
+  setDestFeaturesList(value: Array<lightning_pb.FeatureBitMap[keyof lightning_pb.FeatureBitMap]>): void;
+  addDestFeatures(value: lightning_pb.FeatureBitMap[keyof lightning_pb.FeatureBitMap], index?: number): lightning_pb.FeatureBitMap[keyof lightning_pb.FeatureBitMap];
 
   getMaxParts(): number;
   setMaxParts(value: number): void;
 
   getNoInflightUpdates(): boolean;
   setNoInflightUpdates(value: boolean): void;
+
+  getMaxShardSizeMsat(): number;
+  setMaxShardSizeMsat(value: number): void;
+
+  getAmp(): boolean;
+  setAmp(value: boolean): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SendPaymentRequest.AsObject;
@@ -86,24 +94,26 @@ export class SendPaymentRequest extends jspb.Message {
 export namespace SendPaymentRequest {
   export type AsObject = {
     dest: Uint8Array | string,
-    amt: number,
     amtMsat: number,
+    assetId: number,
     paymentHash: Uint8Array | string,
     finalCltvDelta: number,
+    paymentAddr: Uint8Array | string,
     paymentRequest: string,
     timeoutSeconds: number,
-    feeLimitSat: number,
     feeLimitMsat: number,
     outgoingChanId: string,
-    outgoingChanIds: Array<number>,
+    outgoingChanIdsList: Array<number>,
     lastHopPubkey: Uint8Array | string,
     cltvLimit: number,
-    routeHints: Array<rpc_pb.RouteHint.AsObject>,
-    destCustomRecords: Array<[number, Uint8Array | string]>,
+    routeHintsList: Array<lightning_pb.RouteHint.AsObject>,
+    destCustomRecordsMap: Array<[number, Uint8Array | string]>,
     allowSelfPayment: boolean,
-    destFeatures: Array<rpc_pb.FeatureBit>,
+    destFeaturesList: Array<lightning_pb.FeatureBitMap[keyof lightning_pb.FeatureBitMap]>,
     maxParts: number,
     noInflightUpdates: boolean,
+    maxShardSizeMsat: number,
+    amp: boolean,
   }
 }
 
@@ -139,8 +149,11 @@ export class RouteFeeRequest extends jspb.Message {
   getDest_asB64(): string;
   setDest(value: Uint8Array | string): void;
 
-  getAmtSat(): number;
-  setAmtSat(value: number): void;
+  getAmtMsat(): number;
+  setAmtMsat(value: number): void;
+
+  getAssetId(): number;
+  setAssetId(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): RouteFeeRequest.AsObject;
@@ -155,7 +168,8 @@ export class RouteFeeRequest extends jspb.Message {
 export namespace RouteFeeRequest {
   export type AsObject = {
     dest: Uint8Array | string,
-    amtSat: number,
+    amtMsat: number,
+    assetId: number,
   }
 }
 
@@ -191,8 +205,8 @@ export class SendToRouteRequest extends jspb.Message {
 
   hasRoute(): boolean;
   clearRoute(): void;
-  getRoute(): rpc_pb.Route | undefined;
-  setRoute(value?: rpc_pb.Route): void;
+  getRoute(): lightning_pb.Route | undefined;
+  setRoute(value?: lightning_pb.Route): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SendToRouteRequest.AsObject;
@@ -207,7 +221,7 @@ export class SendToRouteRequest extends jspb.Message {
 export namespace SendToRouteRequest {
   export type AsObject = {
     paymentHash: Uint8Array | string,
-    route?: rpc_pb.Route.AsObject,
+    route?: lightning_pb.Route.AsObject,
   }
 }
 
@@ -219,8 +233,8 @@ export class SendToRouteResponse extends jspb.Message {
 
   hasFailure(): boolean;
   clearFailure(): void;
-  getFailure(): rpc_pb.Failure | undefined;
-  setFailure(value?: rpc_pb.Failure): void;
+  getFailure(): lightning_pb.Failure | undefined;
+  setFailure(value?: lightning_pb.Failure): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SendToRouteResponse.AsObject;
@@ -235,7 +249,7 @@ export class SendToRouteResponse extends jspb.Message {
 export namespace SendToRouteResponse {
   export type AsObject = {
     preimage: Uint8Array | string,
-    failure?: rpc_pb.Failure.AsObject,
+    failure?: lightning_pb.Failure.AsObject,
   }
 }
 
@@ -305,7 +319,49 @@ export class QueryMissionControlResponse extends jspb.Message {
 
 export namespace QueryMissionControlResponse {
   export type AsObject = {
-    pairs: Array<PairHistory.AsObject>,
+    pairsList: Array<PairHistory.AsObject>,
+  }
+}
+
+export class XImportMissionControlRequest extends jspb.Message {
+  clearPairsList(): void;
+  getPairsList(): Array<PairHistory>;
+  setPairsList(value: Array<PairHistory>): void;
+  addPairs(value?: PairHistory, index?: number): PairHistory;
+
+  getForce(): boolean;
+  setForce(value: boolean): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): XImportMissionControlRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: XImportMissionControlRequest): XImportMissionControlRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: XImportMissionControlRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): XImportMissionControlRequest;
+  static deserializeBinaryFromReader(message: XImportMissionControlRequest, reader: jspb.BinaryReader): XImportMissionControlRequest;
+}
+
+export namespace XImportMissionControlRequest {
+  export type AsObject = {
+    pairsList: Array<PairHistory.AsObject>,
+    force: boolean,
+  }
+}
+
+export class XImportMissionControlResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): XImportMissionControlResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: XImportMissionControlResponse): XImportMissionControlResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: XImportMissionControlResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): XImportMissionControlResponse;
+  static deserializeBinaryFromReader(message: XImportMissionControlResponse, reader: jspb.BinaryReader): XImportMissionControlResponse;
+}
+
+export namespace XImportMissionControlResponse {
+  export type AsObject = {
   }
 }
 
@@ -347,17 +403,11 @@ export class PairData extends jspb.Message {
   getFailTime(): number;
   setFailTime(value: number): void;
 
-  getFailAmtSat(): number;
-  setFailAmtSat(value: number): void;
-
   getFailAmtMsat(): number;
   setFailAmtMsat(value: number): void;
 
   getSuccessTime(): number;
   setSuccessTime(value: number): void;
-
-  getSuccessAmtSat(): number;
-  setSuccessAmtSat(value: number): void;
 
   getSuccessAmtMsat(): number;
   setSuccessAmtMsat(value: number): void;
@@ -375,11 +425,121 @@ export class PairData extends jspb.Message {
 export namespace PairData {
   export type AsObject = {
     failTime: number,
-    failAmtSat: number,
     failAmtMsat: number,
     successTime: number,
-    successAmtSat: number,
     successAmtMsat: number,
+  }
+}
+
+export class GetMissionControlConfigRequest extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMissionControlConfigRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMissionControlConfigRequest): GetMissionControlConfigRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetMissionControlConfigRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMissionControlConfigRequest;
+  static deserializeBinaryFromReader(message: GetMissionControlConfigRequest, reader: jspb.BinaryReader): GetMissionControlConfigRequest;
+}
+
+export namespace GetMissionControlConfigRequest {
+  export type AsObject = {
+  }
+}
+
+export class GetMissionControlConfigResponse extends jspb.Message {
+  hasConfig(): boolean;
+  clearConfig(): void;
+  getConfig(): MissionControlConfig | undefined;
+  setConfig(value?: MissionControlConfig): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMissionControlConfigResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMissionControlConfigResponse): GetMissionControlConfigResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetMissionControlConfigResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMissionControlConfigResponse;
+  static deserializeBinaryFromReader(message: GetMissionControlConfigResponse, reader: jspb.BinaryReader): GetMissionControlConfigResponse;
+}
+
+export namespace GetMissionControlConfigResponse {
+  export type AsObject = {
+    config?: MissionControlConfig.AsObject,
+  }
+}
+
+export class SetMissionControlConfigRequest extends jspb.Message {
+  hasConfig(): boolean;
+  clearConfig(): void;
+  getConfig(): MissionControlConfig | undefined;
+  setConfig(value?: MissionControlConfig): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): SetMissionControlConfigRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: SetMissionControlConfigRequest): SetMissionControlConfigRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: SetMissionControlConfigRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SetMissionControlConfigRequest;
+  static deserializeBinaryFromReader(message: SetMissionControlConfigRequest, reader: jspb.BinaryReader): SetMissionControlConfigRequest;
+}
+
+export namespace SetMissionControlConfigRequest {
+  export type AsObject = {
+    config?: MissionControlConfig.AsObject,
+  }
+}
+
+export class SetMissionControlConfigResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): SetMissionControlConfigResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: SetMissionControlConfigResponse): SetMissionControlConfigResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: SetMissionControlConfigResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SetMissionControlConfigResponse;
+  static deserializeBinaryFromReader(message: SetMissionControlConfigResponse, reader: jspb.BinaryReader): SetMissionControlConfigResponse;
+}
+
+export namespace SetMissionControlConfigResponse {
+  export type AsObject = {
+  }
+}
+
+export class MissionControlConfig extends jspb.Message {
+  getHalfLifeSeconds(): number;
+  setHalfLifeSeconds(value: number): void;
+
+  getHopProbability(): number;
+  setHopProbability(value: number): void;
+
+  getWeight(): number;
+  setWeight(value: number): void;
+
+  getMaximumPaymentResults(): number;
+  setMaximumPaymentResults(value: number): void;
+
+  getMinimumFailureRelaxInterval(): number;
+  setMinimumFailureRelaxInterval(value: number): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): MissionControlConfig.AsObject;
+  static toObject(includeInstance: boolean, msg: MissionControlConfig): MissionControlConfig.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: MissionControlConfig, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): MissionControlConfig;
+  static deserializeBinaryFromReader(message: MissionControlConfig, reader: jspb.BinaryReader): MissionControlConfig;
+}
+
+export namespace MissionControlConfig {
+  export type AsObject = {
+    halfLifeSeconds: number,
+    hopProbability: number,
+    weight: number,
+    maximumPaymentResults: number,
+    minimumFailureRelaxInterval: number,
   }
 }
 
@@ -445,6 +605,9 @@ export class BuildRouteRequest extends jspb.Message {
   getAmtMsat(): number;
   setAmtMsat(value: number): void;
 
+  getAssetId(): number;
+  setAssetId(value: number): void;
+
   getFinalCltvDelta(): number;
   setFinalCltvDelta(value: number): void;
 
@@ -457,6 +620,11 @@ export class BuildRouteRequest extends jspb.Message {
   getHopPubkeysList_asB64(): Array<string>;
   setHopPubkeysList(value: Array<Uint8Array | string>): void;
   addHopPubkeys(value: Uint8Array | string, index?: number): Uint8Array | string;
+
+  getPaymentAddr(): Uint8Array | string;
+  getPaymentAddr_asU8(): Uint8Array;
+  getPaymentAddr_asB64(): string;
+  setPaymentAddr(value: Uint8Array | string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BuildRouteRequest.AsObject;
@@ -471,17 +639,19 @@ export class BuildRouteRequest extends jspb.Message {
 export namespace BuildRouteRequest {
   export type AsObject = {
     amtMsat: number,
+    assetId: number,
     finalCltvDelta: number,
     outgoingChanId: string,
-    hopPubkeys: Array<Uint8Array | string>,
+    hopPubkeysList: Array<Uint8Array | string>,
+    paymentAddr: Uint8Array | string,
   }
 }
 
 export class BuildRouteResponse extends jspb.Message {
   hasRoute(): boolean;
   clearRoute(): void;
-  getRoute(): rpc_pb.Route | undefined;
-  setRoute(value?: rpc_pb.Route): void;
+  getRoute(): lightning_pb.Route | undefined;
+  setRoute(value?: lightning_pb.Route): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BuildRouteResponse.AsObject;
@@ -495,7 +665,7 @@ export class BuildRouteResponse extends jspb.Message {
 
 export namespace BuildRouteResponse {
   export type AsObject = {
-    route?: rpc_pb.Route.AsObject,
+    route?: lightning_pb.Route.AsObject,
   }
 }
 
@@ -531,8 +701,8 @@ export class HtlcEvent extends jspb.Message {
   getTimestampNs(): number;
   setTimestampNs(value: number): void;
 
-  getEventType(): HtlcEvent.EventType;
-  setEventType(value: HtlcEvent.EventType): void;
+  getEventType(): HtlcEvent.EventTypeMap[keyof HtlcEvent.EventTypeMap];
+  setEventType(value: HtlcEvent.EventTypeMap[keyof HtlcEvent.EventTypeMap]): void;
 
   hasForwardEvent(): boolean;
   clearForwardEvent(): void;
@@ -572,19 +742,21 @@ export namespace HtlcEvent {
     incomingHtlcId: number,
     outgoingHtlcId: number,
     timestampNs: number,
-    eventType: HtlcEvent.EventType,
+    eventType: HtlcEvent.EventTypeMap[keyof HtlcEvent.EventTypeMap],
     forwardEvent?: ForwardEvent.AsObject,
     forwardFailEvent?: ForwardFailEvent.AsObject,
     settleEvent?: SettleEvent.AsObject,
     linkFailEvent?: LinkFailEvent.AsObject,
   }
 
-  export enum EventType {
-    UNKNOWN = 0,
-    SEND = 1,
-    RECEIVE = 2,
-    FORWARD = 3,
+  export interface EventTypeMap {
+    UNKNOWN: 0;
+    SEND: 1;
+    RECEIVE: 2;
+    FORWARD: 3;
   }
+
+  export const EventType: EventTypeMap;
 
   export enum EventCase {
     EVENT_NOT_SET = 0,
@@ -666,6 +838,11 @@ export namespace ForwardFailEvent {
 }
 
 export class SettleEvent extends jspb.Message {
+  getPreimage(): Uint8Array | string;
+  getPreimage_asU8(): Uint8Array;
+  getPreimage_asB64(): string;
+  setPreimage(value: Uint8Array | string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SettleEvent.AsObject;
   static toObject(includeInstance: boolean, msg: SettleEvent): SettleEvent.AsObject;
@@ -678,6 +855,7 @@ export class SettleEvent extends jspb.Message {
 
 export namespace SettleEvent {
   export type AsObject = {
+    preimage: Uint8Array | string,
   }
 }
 
@@ -687,11 +865,11 @@ export class LinkFailEvent extends jspb.Message {
   getInfo(): HtlcInfo | undefined;
   setInfo(value?: HtlcInfo): void;
 
-  getWireFailure(): rpc_pb.Failure.FailureCode;
-  setWireFailure(value: rpc_pb.Failure.FailureCode): void;
+  getWireFailure(): lightning_pb.Failure.FailureCodeMap[keyof lightning_pb.Failure.FailureCodeMap];
+  setWireFailure(value: lightning_pb.Failure.FailureCodeMap[keyof lightning_pb.Failure.FailureCodeMap]): void;
 
-  getFailureDetail(): FailureDetail;
-  setFailureDetail(value: FailureDetail): void;
+  getFailureDetail(): FailureDetailMap[keyof FailureDetailMap];
+  setFailureDetail(value: FailureDetailMap[keyof FailureDetailMap]): void;
 
   getFailureString(): string;
   setFailureString(value: string): void;
@@ -709,15 +887,15 @@ export class LinkFailEvent extends jspb.Message {
 export namespace LinkFailEvent {
   export type AsObject = {
     info?: HtlcInfo.AsObject,
-    wireFailure: rpc_pb.Failure.FailureCode,
-    failureDetail: FailureDetail,
+    wireFailure: lightning_pb.Failure.FailureCodeMap[keyof lightning_pb.Failure.FailureCodeMap],
+    failureDetail: FailureDetailMap[keyof FailureDetailMap],
     failureString: string,
   }
 }
 
 export class PaymentStatus extends jspb.Message {
-  getState(): PaymentState;
-  setState(value: PaymentState): void;
+  getState(): PaymentStateMap[keyof PaymentStateMap];
+  setState(value: PaymentStateMap[keyof PaymentStateMap]): void;
 
   getPreimage(): Uint8Array | string;
   getPreimage_asU8(): Uint8Array;
@@ -725,9 +903,9 @@ export class PaymentStatus extends jspb.Message {
   setPreimage(value: Uint8Array | string): void;
 
   clearHtlcsList(): void;
-  getHtlcsList(): Array<rpc_pb.HTLCAttempt>;
-  setHtlcsList(value: Array<rpc_pb.HTLCAttempt>): void;
-  addHtlcs(value?: rpc_pb.HTLCAttempt, index?: number): rpc_pb.HTLCAttempt;
+  getHtlcsList(): Array<lightning_pb.HTLCAttempt>;
+  setHtlcsList(value: Array<lightning_pb.HTLCAttempt>): void;
+  addHtlcs(value?: lightning_pb.HTLCAttempt, index?: number): lightning_pb.HTLCAttempt;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PaymentStatus.AsObject;
@@ -741,9 +919,9 @@ export class PaymentStatus extends jspb.Message {
 
 export namespace PaymentStatus {
   export type AsObject = {
-    state: PaymentState,
+    state: PaymentStateMap[keyof PaymentStateMap],
     preimage: Uint8Array | string,
-    htlcs: Array<rpc_pb.HTLCAttempt.AsObject>,
+    htlcsList: Array<lightning_pb.HTLCAttempt.AsObject>,
   }
 }
 
@@ -799,6 +977,11 @@ export class ForwardHtlcInterceptRequest extends jspb.Message {
 
   getCustomRecordsMap(): jspb.Map<number, Uint8Array | string>;
   clearCustomRecordsMap(): void;
+  getOnionBlob(): Uint8Array | string;
+  getOnionBlob_asU8(): Uint8Array;
+  getOnionBlob_asB64(): string;
+  setOnionBlob(value: Uint8Array | string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ForwardHtlcInterceptRequest.AsObject;
   static toObject(includeInstance: boolean, msg: ForwardHtlcInterceptRequest): ForwardHtlcInterceptRequest.AsObject;
@@ -818,7 +1001,8 @@ export namespace ForwardHtlcInterceptRequest {
     outgoingRequestedChanId: number,
     outgoingAmountMsat: number,
     outgoingExpiry: number,
-    customRecords: Array<[number, Uint8Array | string]>,
+    customRecordsMap: Array<[number, Uint8Array | string]>,
+    onionBlob: Uint8Array | string,
   }
 }
 
@@ -828,8 +1012,8 @@ export class ForwardHtlcInterceptResponse extends jspb.Message {
   getIncomingCircuitKey(): CircuitKey | undefined;
   setIncomingCircuitKey(value?: CircuitKey): void;
 
-  getAction(): ResolveHoldForwardAction;
-  setAction(value: ResolveHoldForwardAction): void;
+  getAction(): ResolveHoldForwardActionMap[keyof ResolveHoldForwardActionMap];
+  setAction(value: ResolveHoldForwardActionMap[keyof ResolveHoldForwardActionMap]): void;
 
   getPreimage(): Uint8Array | string;
   getPreimage_asU8(): Uint8Array;
@@ -849,50 +1033,106 @@ export class ForwardHtlcInterceptResponse extends jspb.Message {
 export namespace ForwardHtlcInterceptResponse {
   export type AsObject = {
     incomingCircuitKey?: CircuitKey.AsObject,
-    action: ResolveHoldForwardAction,
+    action: ResolveHoldForwardActionMap[keyof ResolveHoldForwardActionMap],
     preimage: Uint8Array | string,
   }
 }
 
-export enum FailureDetail {
-  UNKNOWN = 0,
-  NO_DETAIL = 1,
-  ONION_DECODE = 2,
-  LINK_NOT_ELIGIBLE = 3,
-  ON_CHAIN_TIMEOUT = 4,
-  HTLC_EXCEEDS_MAX = 5,
-  INSUFFICIENT_BALANCE = 6,
-  INCOMPLETE_FORWARD = 7,
-  HTLC_ADD_FAILED = 8,
-  FORWARDS_DISABLED = 9,
-  INVOICE_CANCELED = 10,
-  INVOICE_UNDERPAID = 11,
-  INVOICE_EXPIRY_TOO_SOON = 12,
-  INVOICE_NOT_OPEN = 13,
-  MPP_INVOICE_TIMEOUT = 14,
-  ADDRESS_MISMATCH = 15,
-  SET_TOTAL_MISMATCH = 16,
-  SET_TOTAL_TOO_LOW = 17,
-  SET_OVERPAID = 18,
-  UNKNOWN_INVOICE = 19,
-  INVALID_KEYSEND = 20,
-  MPP_IN_PROGRESS = 21,
-  CIRCULAR_ROUTE = 22,
+export class UpdateChanStatusRequest extends jspb.Message {
+  hasChanPoint(): boolean;
+  clearChanPoint(): void;
+  getChanPoint(): lightning_pb.ChannelPoint | undefined;
+  setChanPoint(value?: lightning_pb.ChannelPoint): void;
+
+  getAction(): ChanStatusActionMap[keyof ChanStatusActionMap];
+  setAction(value: ChanStatusActionMap[keyof ChanStatusActionMap]): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateChanStatusRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateChanStatusRequest): UpdateChanStatusRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: UpdateChanStatusRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateChanStatusRequest;
+  static deserializeBinaryFromReader(message: UpdateChanStatusRequest, reader: jspb.BinaryReader): UpdateChanStatusRequest;
 }
 
-export enum PaymentState {
-  IN_FLIGHT = 0,
-  SUCCEEDED = 1,
-  FAILED_TIMEOUT = 2,
-  FAILED_NO_ROUTE = 3,
-  FAILED_ERROR = 4,
-  FAILED_INCORRECT_PAYMENT_DETAILS = 5,
-  FAILED_INSUFFICIENT_BALANCE = 6,
+export namespace UpdateChanStatusRequest {
+  export type AsObject = {
+    chanPoint?: lightning_pb.ChannelPoint.AsObject,
+    action: ChanStatusActionMap[keyof ChanStatusActionMap],
+  }
 }
 
-export enum ResolveHoldForwardAction {
-  SETTLE = 0,
-  FAIL = 1,
-  RESUME = 2,
+export class UpdateChanStatusResponse extends jspb.Message {
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UpdateChanStatusResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: UpdateChanStatusResponse): UpdateChanStatusResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: UpdateChanStatusResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UpdateChanStatusResponse;
+  static deserializeBinaryFromReader(message: UpdateChanStatusResponse, reader: jspb.BinaryReader): UpdateChanStatusResponse;
 }
+
+export namespace UpdateChanStatusResponse {
+  export type AsObject = {
+  }
+}
+
+export interface FailureDetailMap {
+  UNKNOWN: 0;
+  NO_DETAIL: 1;
+  ONION_DECODE: 2;
+  LINK_NOT_ELIGIBLE: 3;
+  ON_CHAIN_TIMEOUT: 4;
+  HTLC_EXCEEDS_MAX: 5;
+  INSUFFICIENT_BALANCE: 6;
+  INCOMPLETE_FORWARD: 7;
+  HTLC_ADD_FAILED: 8;
+  FORWARDS_DISABLED: 9;
+  INVOICE_CANCELED: 10;
+  INVOICE_UNDERPAID: 11;
+  INVOICE_EXPIRY_TOO_SOON: 12;
+  INVOICE_NOT_OPEN: 13;
+  MPP_INVOICE_TIMEOUT: 14;
+  ADDRESS_MISMATCH: 15;
+  SET_TOTAL_MISMATCH: 16;
+  SET_TOTAL_TOO_LOW: 17;
+  SET_OVERPAID: 18;
+  UNKNOWN_INVOICE: 19;
+  INVALID_KEYSEND: 20;
+  MPP_IN_PROGRESS: 21;
+  CIRCULAR_ROUTE: 22;
+}
+
+export const FailureDetail: FailureDetailMap;
+
+export interface PaymentStateMap {
+  IN_FLIGHT: 0;
+  SUCCEEDED: 1;
+  FAILED_TIMEOUT: 2;
+  FAILED_NO_ROUTE: 3;
+  FAILED_ERROR: 4;
+  FAILED_INCORRECT_PAYMENT_DETAILS: 5;
+  FAILED_INSUFFICIENT_BALANCE: 6;
+}
+
+export const PaymentState: PaymentStateMap;
+
+export interface ResolveHoldForwardActionMap {
+  SETTLE: 0;
+  FAIL: 1;
+  RESUME: 2;
+}
+
+export const ResolveHoldForwardAction: ResolveHoldForwardActionMap;
+
+export interface ChanStatusActionMap {
+  ENABLE: 0;
+  DISABLE: 1;
+  AUTO: 2;
+}
+
+export const ChanStatusAction: ChanStatusActionMap;
 

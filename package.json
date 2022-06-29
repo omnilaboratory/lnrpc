@@ -28,11 +28,12 @@
   "author": "RadarTech",
   "license": "MIT",
   "dependencies": {
-    "@grpc/grpc-js": "^1.2.4",
-    "@grpc/proto-loader": "^0.4.0",
-    "@types/google-protobuf": "^3.2.7",
+    "@grpc/grpc-js": "latest",
+    "@grpc/proto-loader": "latest",
+    "@types/google-protobuf": "latest",
     "pkg-dir": "^2.0.0",
-    "ts-protoc-gen": "^0.8.0"
+    "protoc-gen-ts": "^0.8.4",
+    "ts-protoc-gen": "latest"
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",

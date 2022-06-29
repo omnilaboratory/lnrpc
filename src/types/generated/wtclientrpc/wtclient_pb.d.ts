@@ -126,6 +126,9 @@ export class TowerSession extends jspb.Message {
   getSweepSatPerByte(): number;
   setSweepSatPerByte(value: number): void;
 
+  getSweepSatPerVbyte(): number;
+  setSweepSatPerVbyte(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): TowerSession.AsObject;
   static toObject(includeInstance: boolean, msg: TowerSession): TowerSession.AsObject;
@@ -142,6 +145,7 @@ export namespace TowerSession {
     numPendingBackups: number,
     maxBackups: number,
     sweepSatPerByte: number,
+    sweepSatPerVbyte: number,
   }
 }
 
@@ -180,10 +184,10 @@ export class Tower extends jspb.Message {
 export namespace Tower {
   export type AsObject = {
     pubkey: Uint8Array | string,
-    addresses: Array<string>,
+    addressesList: Array<string>,
     activeSessionCandidate: boolean,
     numSessions: number,
-    sessions: Array<TowerSession.AsObject>,
+    sessionsList: Array<TowerSession.AsObject>,
   }
 }
 
@@ -225,7 +229,7 @@ export class ListTowersResponse extends jspb.Message {
 
 export namespace ListTowersResponse {
   export type AsObject = {
-    towers: Array<Tower.AsObject>,
+    towersList: Array<Tower.AsObject>,
   }
 }
 
@@ -282,6 +286,9 @@ export namespace StatsResponse {
 }
 
 export class PolicyRequest extends jspb.Message {
+  getPolicyType(): PolicyTypeMap[keyof PolicyTypeMap];
+  setPolicyType(value: PolicyTypeMap[keyof PolicyTypeMap]): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PolicyRequest.AsObject;
   static toObject(includeInstance: boolean, msg: PolicyRequest): PolicyRequest.AsObject;
@@ -294,6 +301,7 @@ export class PolicyRequest extends jspb.Message {
 
 export namespace PolicyRequest {
   export type AsObject = {
+    policyType: PolicyTypeMap[keyof PolicyTypeMap],
   }
 }
 
@@ -303,6 +311,9 @@ export class PolicyResponse extends jspb.Message {
 
   getSweepSatPerByte(): number;
   setSweepSatPerByte(value: number): void;
+
+  getSweepSatPerVbyte(): number;
+  setSweepSatPerVbyte(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PolicyResponse.AsObject;
@@ -318,6 +329,14 @@ export namespace PolicyResponse {
   export type AsObject = {
     maxUpdates: number,
     sweepSatPerByte: number,
+    sweepSatPerVbyte: number,
   }
 }
+
+export interface PolicyTypeMap {
+  LEGACY: 0;
+  ANCHOR: 1;
+}
+
+export const PolicyType: PolicyTypeMap;
 

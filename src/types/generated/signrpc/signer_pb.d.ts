@@ -159,7 +159,7 @@ export class SignReq extends jspb.Message {
 export namespace SignReq {
   export type AsObject = {
     rawTxBytes: Uint8Array | string,
-    signDescs: Array<SignDescriptor.AsObject>,
+    signDescsList: Array<SignDescriptor.AsObject>,
   }
 }
 
@@ -183,7 +183,7 @@ export class SignResp extends jspb.Message {
 
 export namespace SignResp {
   export type AsObject = {
-    rawSigs: Array<Uint8Array | string>,
+    rawSigsList: Array<Uint8Array | string>,
   }
 }
 
@@ -212,7 +212,7 @@ export class InputScript extends jspb.Message {
 
 export namespace InputScript {
   export type AsObject = {
-    witness: Array<Uint8Array | string>,
+    witnessList: Array<Uint8Array | string>,
     sigScript: Uint8Array | string,
   }
 }
@@ -235,7 +235,7 @@ export class InputScriptResp extends jspb.Message {
 
 export namespace InputScriptResp {
   export type AsObject = {
-    inputScripts: Array<InputScript.AsObject>,
+    inputScriptsList: Array<InputScript.AsObject>,
   }
 }
 
@@ -249,6 +249,12 @@ export class SignMessageReq extends jspb.Message {
   clearKeyLoc(): void;
   getKeyLoc(): KeyLocator | undefined;
   setKeyLoc(value?: KeyLocator): void;
+
+  getDoubleHash(): boolean;
+  setDoubleHash(value: boolean): void;
+
+  getCompactSig(): boolean;
+  setCompactSig(value: boolean): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SignMessageReq.AsObject;
@@ -264,6 +270,8 @@ export namespace SignMessageReq {
   export type AsObject = {
     msg: Uint8Array | string,
     keyLoc?: KeyLocator.AsObject,
+    doubleHash: boolean,
+    compactSig: boolean,
   }
 }
 
@@ -354,6 +362,11 @@ export class SharedKeyRequest extends jspb.Message {
   getKeyLoc(): KeyLocator | undefined;
   setKeyLoc(value?: KeyLocator): void;
 
+  hasKeyDesc(): boolean;
+  clearKeyDesc(): void;
+  getKeyDesc(): KeyDescriptor | undefined;
+  setKeyDesc(value?: KeyDescriptor): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SharedKeyRequest.AsObject;
   static toObject(includeInstance: boolean, msg: SharedKeyRequest): SharedKeyRequest.AsObject;
@@ -368,6 +381,7 @@ export namespace SharedKeyRequest {
   export type AsObject = {
     ephemeralPubkey: Uint8Array | string,
     keyLoc?: KeyLocator.AsObject,
+    keyDesc?: KeyDescriptor.AsObject,
   }
 }
 

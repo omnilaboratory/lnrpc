@@ -2,7 +2,7 @@
 // file: walletunlocker.proto
 
 import * as jspb from "google-protobuf";
-import * as rpc_pb from "./rpc_pb";
+import * as lightning_pb from "./lightning_pb";
 
 export class GenSeedRequest extends jspb.Message {
   getAezeedPassphrase(): Uint8Array | string;
@@ -55,7 +55,7 @@ export class GenSeedResponse extends jspb.Message {
 
 export namespace GenSeedResponse {
   export type AsObject = {
-    cipherSeedMnemonic: Array<string>,
+    cipherSeedMnemonicList: Array<string>,
     encipheredSeed: Uint8Array | string,
   }
 }
@@ -81,8 +81,22 @@ export class InitWalletRequest extends jspb.Message {
 
   hasChannelBackups(): boolean;
   clearChannelBackups(): void;
-  getChannelBackups(): rpc_pb.ChanBackupSnapshot | undefined;
-  setChannelBackups(value?: rpc_pb.ChanBackupSnapshot): void;
+  getChannelBackups(): lightning_pb.ChanBackupSnapshot | undefined;
+  setChannelBackups(value?: lightning_pb.ChanBackupSnapshot): void;
+
+  getStatelessInit(): boolean;
+  setStatelessInit(value: boolean): void;
+
+  getExtendedMasterKey(): string;
+  setExtendedMasterKey(value: string): void;
+
+  getExtendedMasterKeyBirthdayTimestamp(): number;
+  setExtendedMasterKeyBirthdayTimestamp(value: number): void;
+
+  hasWatchOnly(): boolean;
+  clearWatchOnly(): void;
+  getWatchOnly(): WatchOnly | undefined;
+  setWatchOnly(value?: WatchOnly): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): InitWalletRequest.AsObject;
@@ -97,14 +111,23 @@ export class InitWalletRequest extends jspb.Message {
 export namespace InitWalletRequest {
   export type AsObject = {
     walletPassword: Uint8Array | string,
-    cipherSeedMnemonic: Array<string>,
+    cipherSeedMnemonicList: Array<string>,
     aezeedPassphrase: Uint8Array | string,
     recoveryWindow: number,
-    channelBackups?: rpc_pb.ChanBackupSnapshot.AsObject,
+    channelBackups?: lightning_pb.ChanBackupSnapshot.AsObject,
+    statelessInit: boolean,
+    extendedMasterKey: string,
+    extendedMasterKeyBirthdayTimestamp: number,
+    watchOnly?: WatchOnly.AsObject,
   }
 }
 
 export class InitWalletResponse extends jspb.Message {
+  getAdminMacaroon(): Uint8Array | string;
+  getAdminMacaroon_asU8(): Uint8Array;
+  getAdminMacaroon_asB64(): string;
+  setAdminMacaroon(value: Uint8Array | string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): InitWalletResponse.AsObject;
   static toObject(includeInstance: boolean, msg: InitWalletResponse): InitWalletResponse.AsObject;
@@ -117,6 +140,71 @@ export class InitWalletResponse extends jspb.Message {
 
 export namespace InitWalletResponse {
   export type AsObject = {
+    adminMacaroon: Uint8Array | string,
+  }
+}
+
+export class WatchOnly extends jspb.Message {
+  getMasterKeyBirthdayTimestamp(): number;
+  setMasterKeyBirthdayTimestamp(value: number): void;
+
+  getMasterKeyFingerprint(): Uint8Array | string;
+  getMasterKeyFingerprint_asU8(): Uint8Array;
+  getMasterKeyFingerprint_asB64(): string;
+  setMasterKeyFingerprint(value: Uint8Array | string): void;
+
+  clearAccountsList(): void;
+  getAccountsList(): Array<WatchOnlyAccount>;
+  setAccountsList(value: Array<WatchOnlyAccount>): void;
+  addAccounts(value?: WatchOnlyAccount, index?: number): WatchOnlyAccount;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): WatchOnly.AsObject;
+  static toObject(includeInstance: boolean, msg: WatchOnly): WatchOnly.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: WatchOnly, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): WatchOnly;
+  static deserializeBinaryFromReader(message: WatchOnly, reader: jspb.BinaryReader): WatchOnly;
+}
+
+export namespace WatchOnly {
+  export type AsObject = {
+    masterKeyBirthdayTimestamp: number,
+    masterKeyFingerprint: Uint8Array | string,
+    accountsList: Array<WatchOnlyAccount.AsObject>,
+  }
+}
+
+export class WatchOnlyAccount extends jspb.Message {
+  getPurpose(): number;
+  setPurpose(value: number): void;
+
+  getCoinType(): number;
+  setCoinType(value: number): void;
+
+  getAccount(): number;
+  setAccount(value: number): void;
+
+  getXpub(): string;
+  setXpub(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): WatchOnlyAccount.AsObject;
+  static toObject(includeInstance: boolean, msg: WatchOnlyAccount): WatchOnlyAccount.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: WatchOnlyAccount, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): WatchOnlyAccount;
+  static deserializeBinaryFromReader(message: WatchOnlyAccount, reader: jspb.BinaryReader): WatchOnlyAccount;
+}
+
+export namespace WatchOnlyAccount {
+  export type AsObject = {
+    purpose: number,
+    coinType: number,
+    account: number,
+    xpub: string,
   }
 }
 
@@ -131,8 +219,11 @@ export class UnlockWalletRequest extends jspb.Message {
 
   hasChannelBackups(): boolean;
   clearChannelBackups(): void;
-  getChannelBackups(): rpc_pb.ChanBackupSnapshot | undefined;
-  setChannelBackups(value?: rpc_pb.ChanBackupSnapshot): void;
+  getChannelBackups(): lightning_pb.ChanBackupSnapshot | undefined;
+  setChannelBackups(value?: lightning_pb.ChanBackupSnapshot): void;
+
+  getStatelessInit(): boolean;
+  setStatelessInit(value: boolean): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): UnlockWalletRequest.AsObject;
@@ -148,7 +239,8 @@ export namespace UnlockWalletRequest {
   export type AsObject = {
     walletPassword: Uint8Array | string,
     recoveryWindow: number,
-    channelBackups?: rpc_pb.ChanBackupSnapshot.AsObject,
+    channelBackups?: lightning_pb.ChanBackupSnapshot.AsObject,
+    statelessInit: boolean,
   }
 }
 
@@ -179,6 +271,12 @@ export class ChangePasswordRequest extends jspb.Message {
   getNewPassword_asB64(): string;
   setNewPassword(value: Uint8Array | string): void;
 
+  getStatelessInit(): boolean;
+  setStatelessInit(value: boolean): void;
+
+  getNewMacaroonRootKey(): boolean;
+  setNewMacaroonRootKey(value: boolean): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ChangePasswordRequest.AsObject;
   static toObject(includeInstance: boolean, msg: ChangePasswordRequest): ChangePasswordRequest.AsObject;
@@ -193,10 +291,17 @@ export namespace ChangePasswordRequest {
   export type AsObject = {
     currentPassword: Uint8Array | string,
     newPassword: Uint8Array | string,
+    statelessInit: boolean,
+    newMacaroonRootKey: boolean,
   }
 }
 
 export class ChangePasswordResponse extends jspb.Message {
+  getAdminMacaroon(): Uint8Array | string;
+  getAdminMacaroon_asU8(): Uint8Array;
+  getAdminMacaroon_asB64(): string;
+  setAdminMacaroon(value: Uint8Array | string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ChangePasswordResponse.AsObject;
   static toObject(includeInstance: boolean, msg: ChangePasswordResponse): ChangePasswordResponse.AsObject;
@@ -209,5 +314,7 @@ export class ChangePasswordResponse extends jspb.Message {
 
 export namespace ChangePasswordResponse {
   export type AsObject = {
+    adminMacaroon: Uint8Array | string,
   }
 }
+
