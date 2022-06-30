@@ -143,10 +143,11 @@ export enum ResolutionOutcome {
 }
 
 export enum CommitmentType {
-  LEGACY = 0,
-  STATIC_REMOTE_KEY = 1,
-  ANCHORS = 2,
-  UNKNOWN_COMMITMENT_TYPE = 999,
+  UNKNOWN_COMMITMENT_TYPE = 0,
+  LEGACY = 1,
+  STATIC_REMOTE_KEY = 2,
+  ANCHORS = 3,
+  SCRIPT_ENFORCED_LEASE = 4,
 }
 
 export enum AnchorState {
@@ -712,10 +713,14 @@ export interface ClosedChannelsResponse {
 }
 
 export interface OpenChannelRequest {
+  satPerVbyte?: number;
   nodePubkey?: Buffer | string;
   nodePubkeyString?: string;
-  localFundingAmount?: string;
-  pushSat?: string;
+  localFundingBtcAmount?: string;
+  pushBtcSat?: string;
+  assetId?: number;
+  pushAssetSat: string;
+  localFundingAssetAmount: string;
   targetConf?: number;
   satPerByte?: string;
   private?: boolean;
@@ -727,6 +732,8 @@ export interface OpenChannelRequest {
   fundingShim?: FundingShim;
   remoteMaxValueInFlightMsat?: number;
   remoteMaxHtlcs?: number;
+  maxLocalCsv?: number;
+  commitmentType?: CommitmentType;
 }
 
 export interface PendingUpdate {
@@ -825,8 +832,9 @@ export interface AbandonChannelRequest {
 export interface SendRequest {
   dest?: Buffer | string;
   destString?: string;
-  amt?: string;
+  // amt?: string;
   amtMsat?: number;
+  assetId?: number;
   paymentHash?: Buffer | string;
   paymentHashString?: string;
   paymentRequest?: string;
@@ -838,6 +846,7 @@ export interface SendRequest {
   destCustomRecords?: Array<[number, Buffer]> | string[];
   allowSelfPayment?: boolean;
   destFeatures?: FeatureBit[];
+  paymentAddr?: Buffer | string;
 }
 
 export interface SendResponse {
