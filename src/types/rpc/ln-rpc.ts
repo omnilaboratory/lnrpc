@@ -2,10 +2,11 @@ import { Duplex, Readable } from '../streams';
 import { KeyDescriptor } from './sign-rpc';
 
 export enum AddressType {
-  WITNESS_PUBKEY_HASH = 0,
-  NESTED_PUBKEY_HASH = 1,
-  UNUSED_WITNESS_PUBKEY_HASH = 2,
-  UNUSED_NESTED_PUBKEY_HASH = 3,
+  WITNESS_PUBKEY_HASH_DISABLED=0,
+  NESTED_PUBKEY_HASH_DISABLED=1,
+  PUBKEY= 2,
+  UNUSED_WITNESS_PUBKEY_HASH=3,
+  UNUSED_NESTED_PUBKEY_HASH=4,
 }
 
 export enum ClosureType {
