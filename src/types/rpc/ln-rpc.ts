@@ -236,6 +236,9 @@ export interface Peer {
   syncType: SyncType;
   features?: Array<[number, Feature]>;
   errors?: TimestampedError[];
+  flapCount: number;
+  lastFlapNs: number;
+  lastPingPayload: Uint8Array | string;
 }
 
 export interface PeerEvent {
@@ -727,8 +730,8 @@ export interface OpenChannelRequest {
   localFundingBtcAmount?: string;
   pushBtcSat?: string;
   assetId?: number;
-  pushAssetSat: string;
-  localFundingAssetAmount: string;
+  pushAssetSat?: string;
+  localFundingAssetAmount?: string;
   targetConf?: number;
   satPerByte?: string;
   private?: boolean;
@@ -820,6 +823,7 @@ export interface CloseChannelRequest {
   targetConf?: number;
   satPerByte?: string;
   deliveryAddress?: string;
+  satPerVbyte?: number;
 }
 
 export interface ChannelCloseUpdate {
@@ -840,7 +844,7 @@ export interface AbandonChannelRequest {
 export interface SendRequest {
   dest?: Buffer | string;
   destString?: string;
-  // amt?: string;
+  amt?: string;
   amtMsat?: number;
   assetId?: number;
   paymentHash?: Buffer | string;
@@ -901,6 +905,7 @@ export interface Invoice {
   receipt?: Buffer | string;
   rPreimage?: Buffer | string;
   rHash?: Buffer | string;
+  assetId?: number;
   value?: string;
   valueMsat?: string;
   settled?: boolean;
@@ -922,6 +927,8 @@ export interface Invoice {
   htlcs?: InvoiceHTLC[];
   features?: Array<[number, Feature]>;
   isKeysend?: boolean;
+  paymentAddr?: Buffer | string;
+  isAmp?: boolean;
 }
 
 export interface InvoiceHTLC {
@@ -941,6 +948,7 @@ export interface AddInvoiceResponse {
   rHash: Buffer | string;
   paymentRequest: string;
   addIndex: string;
+  paymentAddr: Buffer | string;
 }
 
 export interface ListInvoiceRequest {
@@ -983,6 +991,8 @@ export interface PayReq {
   routeHints?: RouteHint[];
   paymentAddr?: Buffer | string;
   numMsat?: string;
+  amtMsat: string;
+  assetId: number;
   features?: Array<[number, Feature]>;
 }
 
