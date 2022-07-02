@@ -324,9 +324,14 @@ export interface Channel {
   remotePubkey: string;
   channelPoint: string;
   chanId: string;
-  capacity: string;
+  // capacity: string;
+  btcCapacity: string;
+  assetCapacity: string;
   localBalance: string;
   remoteBalance: string;
+  localAssetBalance: string;
+  remoteAssetBalance: string;
+  assetId: number;
   commitFee: string;
   commitWeight: string;
   feePerKw: string;
@@ -346,7 +351,9 @@ export interface Channel {
   lifetime: number;
   uptime: number;
   closeAddress: string;
-  pushAmountSat: number;
+  // pushAmountSat: number;
+  pushBtcAmountSat: number;
+  pushAssetAmountSat: number;
   thawHeight: number;
   localConstraints?: ChannelConstraints;
   remoteConstraints?: ChannelConstraints;
