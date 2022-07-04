@@ -52,13 +52,15 @@ export enum ResolveHoldForwardAction {
 
 export interface SendPaymentRequest {
   dest?: Buffer | string;
-  amt?: number;
+  // amt?: number;
   amtMsat?: number;
+  assetId?: number;
   paymentHash?: Buffer | string;
   finalCltvDelta?: number;
+  paymentAddr: Uint8Array | string;
   paymentRequest?: string;
   timeoutSeconds?: number;
-  feeLimitSat?: number;
+  // feeLimitSat?: number;
   feeLimitMsat?: number;
   outgoingChanId?: string;
   outgoingChanIds?: number[];
@@ -70,6 +72,8 @@ export interface SendPaymentRequest {
   destFeatures?: FeatureBit[];
   maxParts?: number;
   noInflightUpdates?: boolean;
+  maxShardSizeMsat: number;
+  amp: boolean;
 }
 
 export interface TrackPaymentRequest {

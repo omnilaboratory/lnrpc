@@ -434,15 +434,15 @@ export interface RouteHint {
 
 export interface Payment {
   paymentHash: string;
-  value: string;
+  // value: string;
   creationDate: string;
-  fee: string;
+  // fee: string;
   paymentPreimage: string;
-  valueSat: string;
+  // valueSat: string;
   valueMsat: string;
   paymentRequest: string;
   status: PaymentStatus;
-  feeSat: string;
+  // feeSat: string;
   feeMsat: string;
   creationTimeNs?: string;
   htlcs?: HTLCAttempt[];
@@ -844,7 +844,7 @@ export interface AbandonChannelRequest {
 export interface SendRequest {
   dest?: Buffer | string;
   destString?: string;
-  amt?: string;
+  // amt?: string;
   amtMsat?: number;
   assetId?: number;
   paymentHash?: Buffer | string;
@@ -906,7 +906,7 @@ export interface Invoice {
   rPreimage?: Buffer | string;
   rHash?: Buffer | string;
   assetId?: number;
-  value?: string;
+  // value?: string;
   valueMsat?: string;
   settled?: boolean;
   creationDate?: string;
@@ -920,8 +920,8 @@ export interface Invoice {
   private?: boolean;
   addIndex?: string;
   settleIndex?: string;
-  amtPaid?: string;
-  amtPaidSat?: string;
+  // amtPaid?: string;
+  // amtPaidSat?: string;
   amtPaidMsat?: string;
   state?: InvoiceState;
   htlcs?: InvoiceHTLC[];
@@ -981,7 +981,7 @@ export interface PayReqString {
 export interface PayReq {
   destination: string;
   paymentHash: string;
-  numSatoshis: string;
+  // numSatoshis: string;
   timestamp: string;
   expiry: string;
   description: string;
@@ -990,7 +990,7 @@ export interface PayReq {
   cltvExpiry: string;
   routeHints?: RouteHint[];
   paymentAddr?: Buffer | string;
-  numMsat?: string;
+  // numMsat?: string;
   amtMsat: string;
   assetId: number;
   features?: Array<[number, Feature]>;
